@@ -1,16 +1,16 @@
-import os
-import singleton
+from os import environ
+from helper.singleton import Singleton
 
-class Settings(metaclass=singleton.Singleton):
+class Settings(metaclass=Singleton):
     def __init__(self):
-        if "LHAPI_URL" not in os.environ:
-            raise ValueError("LHAPI_URL is not defined in environment variables")
-        self.__lhapi_url = os.environ["LHAPI_URL"]
+        if "LHAPI_URL" not in environ:
+            environ["LHAPI_URL"] = "http://localhost:5002"
+        self.__lhapi_url = environ["LHAPI_URL"]
         print(f"LHAPI_URL: {self.__lhapi_url}")
 
-        if "GAME_SERVER_URL" not in os.environ:
-            raise ValueError("GAME_SERVER_URL is not defined in environment variables")
-        self.__game_server_url = os.environ["GAME_SERVER_URL"]
+        if "GAME_SERVER_URL" not in environ:
+            environ["GAME_SERVER_URL"] = "http://localhost:5001"
+        self.__game_server_url = environ["GAME_SERVER_URL"]
         print(f"GAME_SERVER_URL: {self.__game_server_url}")
 
     @property
