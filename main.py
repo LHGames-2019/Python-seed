@@ -12,7 +12,7 @@ if __name__ == '__main__':
 
     lhapi_url = Settings().lhapi_url
     if lhapi_url != None and lhapi_url != "":
-        is_online = Ttrue
+        is_online = True
 
     bot = Bot()
     GameServerService().set_bot(bot)
@@ -25,7 +25,7 @@ if __name__ == '__main__':
         game_server_url = Settings().game_server_url
         if game_server_url == None or game_server_url == "":
             print("Error: GAME_SERVER_URL variable isn't defined")
-            return 1
+            exit(1)
         GameServerService().start()
 
     while True:
