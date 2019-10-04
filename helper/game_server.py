@@ -59,9 +59,9 @@ class GameServerService(metaclass=Singleton):
 
         others = []
         for other_team in Team.get_other_teams(host_team):
-            host_position = current_map.get_head_position(other_team)
-            host_tail = current_map.get_tail_length(other_team)
-            host_body = current_map.get_body_size(other_team)
+            other_position = current_map.get_head_position(other_team)
+            other_tail = current_map.get_tail_length(other_team)
+            other_body = current_map.get_body_size(other_team)
             others.append(Player(
                 other_team,
                 other_position,
@@ -69,7 +69,7 @@ class GameServerService(metaclass=Singleton):
                 other_body,
             ))
 
-        game_ifo = GameInfo(current_map, host, others)
+        game_info = GameInfo(current_map, host, others)
             
         return self.__bot.get_next_action(game_info)
 
