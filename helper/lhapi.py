@@ -21,12 +21,10 @@ class LHAPIService(metaclass=Singleton):
         self.__hub.on_open(self.__on_open)
         self.__hub.on_close(self.__on_close)
         self.__hub.on("AssignTeamId", self.__on_assign_team_id)
+        self.__hub.on("AssignGameServerUriToGameId", self.__on_assign_game_server_uri_to_game_id)
 
     def start(self):
         self.__hub.start()
-
-    def join(self):
-        self.__hub.hub._thread.join()
 
     def __on_open(self):
         print("lhapi: connection opened and handshake received")
@@ -35,4 +33,8 @@ class LHAPIService(metaclass=Singleton):
         print("lhapi: connection closed")
 
     def __on_assign_team_id(self, team_id):
-        self.__set_team_id(team_id)
+        GameServerService().set_team_id(team_id)
+
+    def __on_assign_game_server_uri_to_game_id(self, url):
+        Settings().game_server_url = url
+        GameServerService().start()

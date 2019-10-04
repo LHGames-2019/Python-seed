@@ -26,9 +26,6 @@ class GameServerService(metaclass=Singleton):
     def start(self):
         self.__hub.start()
 
-    def join(self):
-        self.__hub.hub._thread.join()
-
     def __on_open(self):
         print("game server: connection opened and handshake received")
 
