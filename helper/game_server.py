@@ -10,6 +10,12 @@ class GameServerService(metaclass=Singleton):
     def __init__(self):
         self.__team_id = None
         self.__bot = None
+        self.__hub = None
+
+    def start(self):
+        if self.__hub is not None:
+            print("game server: already started")
+            return
 
         self.__hub = HubConnectionBuilder() \
             .with_url(Settings().game_server_url + "/teamshub") \
@@ -22,8 +28,6 @@ class GameServerService(metaclass=Singleton):
         self.__hub.on_open(self.__on_open)
         self.__hub.on_close(self.__on_close)
         self.__hub.on("RequestExecuteTurn", self.__on_request_execute_turn)
-
-    def start(self):
         self.__hub.start()
 
     def __on_open(self):

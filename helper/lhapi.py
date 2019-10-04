@@ -9,6 +9,12 @@ from signalrcore.hub_connection_builder import HubConnectionBuilder
 class LHAPIService(metaclass=Singleton):
     def __init__(self):
         self.__game_server = GameServerService()
+        self.__hub = None
+
+    def start(self):
+        if self.__hub is not None:
+            print("lhapi: already started")
+            return
 
         self.__hub = HubConnectionBuilder() \
             .with_url(Settings().lhapi_url + "/teamshub") \
@@ -22,8 +28,6 @@ class LHAPIService(metaclass=Singleton):
         self.__hub.on_close(self.__on_close)
         self.__hub.on("AssignTeamId", self.__on_assign_team_id)
         self.__hub.on("AssignGameServerUriToGameId", self.__on_assign_game_server_uri_to_game_id)
-
-    def start(self):
         self.__hub.start()
 
     def __on_open(self):
