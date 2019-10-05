@@ -11,6 +11,7 @@ class GameServerService(metaclass=Singleton):
         self.__team_id = None
         self.__bot = None
         self.__hub = None
+        self.__hub_open = None
 
     def start(self):
         if self.__hub is not None:
@@ -33,16 +34,23 @@ class GameServerService(metaclass=Singleton):
 
     def __on_open(self):
         print("game server: connection opened and handshake received")
-        self.hub_open = True
+        self.__hub_open = True
         if self.__team_id is not None:
-            self.__hub.send("Register", self.__team_id)
+            self.__hub.send("Register", [self.__team_id])
 
     def __on_close(self):
         print("game server: connection closed")
 
-    def __on_request_execute_turn(self, currentMap, dimension, maxMovement, movementLeft, lastMove, teamNumber):
+    def __on_request_execute_turn(self, data):
         if self.__bot == None:
             raise ValueError
+
+        currentMap = data[0]
+        dimension = data[1]
+        maxMovement = data[2]
+        movementLeft = data[3]
+        lastMove = data[4]
+        teamNumber = data[5]
 
         current_map = Map.from_strings(currentMap)
 
@@ -51,11 +59,12 @@ class GameServerService(metaclass=Singleton):
         host_tail = current_map.get_tail_length(host_team)
         host_body = current_map.get_body_size(host_team)
         host_max_movement = maxMovement
-        host_movement_left = movement_left
+        host_movement_left = movementLeft
         host_last_move = lastMove
         host = HostPlayer(
             host_team,
             host_position,
+            host_tail,
             host_body,
             host_max_movement,
             host_movement_left,
@@ -75,7 +84,7 @@ class GameServerService(metaclass=Singleton):
             ))
 
         game_info = GameInfo(current_map, host, others)
-            
+
         return self.__bot.get_next_action(game_info)
 
     def __on_receive_final_map(self, map):
@@ -88,5 +97,5 @@ class GameServerService(metaclass=Singleton):
         if self.__team_id is not None:
             print("game server: received team ID multiple times")
         self.__team_id = team_id
-        if self.hub_open:
-            self.__hub.send("Register", team_id)
+        if self.__hub_open is not None:
+            self.__hub.send("Register", [team_id])

@@ -21,10 +21,10 @@ class Team(Enum):
     @staticmethod
     def get_other_teams(team):
         teams = {
-            Team.TEAM_1,
-            Team.TEAM_2,
-            Team.TEAM_3,
-            Team.TEAM_4,
+            Team.TEAM_1.value,
+            Team.TEAM_2.value,
+            Team.TEAM_3.value,
+            Team.TEAM_4.value,
         }
         teams.remove(team)
         return teams
@@ -32,28 +32,28 @@ class Team(Enum):
     @staticmethod
     def from_tail_string(string):
         return {
-            'a': Team.TEAM_1,
-            'b': Team.TEAM_2,
-            'c': Team.TEAM_3,
-            'd': Team.TEAM_4,
+            'a': Team.TEAM_1.value,
+            'b': Team.TEAM_2.value,
+            'c': Team.TEAM_3.value,
+            'd': Team.TEAM_4.value,
         }[string]
 
     @staticmethod
     def from_body_string(string):
         return {
-            'A': Team.TEAM_1,
-            'B': Team.TEAM_2,
-            'C': Team.TEAM_3,
-            'D': Team.TEAM_4,
+            'A': Team.TEAM_1.value,
+            'B': Team.TEAM_2.value,
+            'C': Team.TEAM_3.value,
+            'D': Team.TEAM_4.value,
         }[string]
 
     @staticmethod
     def from_string(string):
         return {
-            '1': Team.TEAM_1,
-            '2': Team.TEAM_2,
-            '3': Team.TEAM_3,
-            '4': Team.TEAM_4,
+            '1': Team.TEAM_1.value,
+            '2': Team.TEAM_2.value,
+            '3': Team.TEAM_3.value,
+            '4': Team.TEAM_4.value,
         }[string]
 
     def __str__(self):

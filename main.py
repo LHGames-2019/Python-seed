@@ -26,6 +26,7 @@ if __name__ == '__main__':
         if game_server_url == None or game_server_url == "":
             print("Error: GAME_SERVER_URL variable isn't defined")
             exit(1)
+        GameServerService().set_team_id(Settings().team_id)
         GameServerService().start()
 
     while True:
