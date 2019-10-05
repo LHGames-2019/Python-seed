@@ -32,6 +32,7 @@ class LHAPIService(metaclass=Singleton):
 
     def __on_open(self):
         print("lhapi: connection opened and handshake received")
+        self.__hub.send("Register", [Settings().team_id, Settings().game_id])
 
     def __on_close(self):
         print("lhapi: connection closed")

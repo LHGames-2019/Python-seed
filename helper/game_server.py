@@ -28,10 +28,14 @@ class GameServerService(metaclass=Singleton):
         self.__hub.on_open(self.__on_open)
         self.__hub.on_close(self.__on_close)
         self.__hub.on("RequestExecuteTurn", self.__on_request_execute_turn)
+        self.__hub.on("ReceiveFinalMap", self.__on_receive_final_map)
         self.__hub.start()
 
     def __on_open(self):
         print("game server: connection opened and handshake received")
+        self.hub_open = True
+        if self.__team_id is not None:
+            self.__hub.send("Register", self.__team_id)
 
     def __on_close(self):
         print("game server: connection closed")
@@ -74,6 +78,9 @@ class GameServerService(metaclass=Singleton):
             
         return self.__bot.get_next_action(game_info)
 
+    def __on_receive_final_map(self, map):
+        self.__hub.stop()
+
     def set_bot(self, bot):
         self.__bot = bot
 
@@ -81,5 +88,5 @@ class GameServerService(metaclass=Singleton):
         if self.__team_id is not None:
             print("game server: received team ID multiple times")
         self.__team_id = team_id
-        self.__hub.send("Register", team_id)
-
+        if self.hub_open:
+            self.__hub.send("Register", team_id)
