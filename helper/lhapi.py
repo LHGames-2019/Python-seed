@@ -41,5 +41,6 @@ class LHAPIService(metaclass=Singleton):
         GameServerService().set_team_id(team_id)
 
     def __on_assign_game_server_uri_to_game_id(self, url):
-        Settings().game_server_url = url
+        Settings().game_server_url = url[0]
+        GameServerService().set_team_id(Settings().team_id)
         GameServerService().start()
